@@ -16,7 +16,7 @@ mongoose.connect(
 );
 // http:localHost:3001/users/12345
 app.use(routes);
-app.use("/users", usersRouter);
+// app.use("/users", usersRouter);
 
 app.listen(PORT, () => {
   console.log(`App is listening at ${PORT}`);
