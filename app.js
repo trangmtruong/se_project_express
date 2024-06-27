@@ -15,10 +15,12 @@ mongoose.connect(
   (e) => console.log("DB error", e)
 );
 // http:localHost:3001/users/12345
+app.use(express.json());
 app.use(routes);
+
 // app.use("/users", usersRouter);
 
 app.listen(PORT, () => {
   console.log(`App is listening at ${PORT}`);
-  console.log("kjdjkds");
+  console.log("This is working!");
 });
