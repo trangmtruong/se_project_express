@@ -2,10 +2,10 @@
 //like signposts that direct traffic
 const router = require("express").Router();
 const clothingRouter = require("./clothingItems");
-// const usersRouter = require("./users");
+const userRouter = require("./users");
 
 router.use("/items", clothingRouter);
-// router.use("/users", userRouter);
+router.use("/users", userRouter);
 
 router.use((req, res) => {
   res.status(500).send({ message: "Router not found" });

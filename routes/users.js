@@ -4,6 +4,8 @@
 const { Router } = require("express");
 
 const router = Router();
+
+const { createUser, getUsers, getUserId } = require("../controllers/users");
 //all routes in this file start with /users
 router.post("/", createUser);
 router.get("/", getUsers);

@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./routes");
-const usersRouter = require("./routes/users");
+// const userRouter = require("./routes/users");
 
 const { PORT = 3001 } = process.env;
 
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 app.use(routes);
 
-// app.use("/users", usersRouter);
+// app.use("/users", userRouter);
 
 app.listen(PORT, () => {
   console.log(`App is listening at ${PORT}`);
