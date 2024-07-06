@@ -1,12 +1,11 @@
-//Controllers decide what happens when you get a request from a server
-//imports clothingItemSchema
+// Controllers decide what happens when you get a request from a server
+// imports clothingItemSchema
 const ClothingItem = require("../models/clothingItem");
 const {
   OK,
   BAD_REQUEST,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
-  NO_CONTENT,
   messageBadRequest,
   messageInternalServerError,
   messageNotFoundError,
@@ -31,14 +30,14 @@ const createItem = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from createItem`, err });
-      } else {
+      }
         return res
           .status(INTERNAL_SERVER_ERROR)
           .send({ message: `${messageInternalServerError} from createItem` });
-      }
+
     });
 };
-("");
+
 
 const getItems = (req, res) => {
   ClothingItem.find({})
@@ -49,11 +48,11 @@ const getItems = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest}from getItems`, err });
-      } else {
+      }
         return res
           .status(INTERNAL_SERVER_ERROR)
           .send({ message: `${messageInternalServerError} from getItems` });
-      }
+
     });
 };
 
@@ -70,11 +69,11 @@ const updateItem = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from updateItem`, err });
-      } else {
+      }
         return res
           .status(INTERNAL_SERVER_ERROR)
           .send({ message: `${messageInternalServerError} from updateItem` });
-      }
+
     });
 };
 
@@ -91,15 +90,15 @@ const deleteItem = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from deleteItem`, err });
-      } else if (err.name === "DocumentNotFoundError") {
+      } if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from deleteItem` });
-      } else {
+      }
         return res
           .status(INTERNAL_SERVER_ERROR)
           .send({ message: `${messageInternalServerError} from deleteItem` });
-      }
+
     });
 };
 
@@ -117,15 +116,15 @@ const likeItem = (req, res) =>
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from likeItem` });
-      } else if (err.name === "DocumentNotFoundError") {
+      } if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from likeItem` });
-      } else {
+      }
         return res
           .status(INTERNAL_SERVER_ERROR)
           .send({ message: `${messageInternalServerError} from likeItem` });
-      }
+
     });
 
 const dislikeItem = (req, res) =>
@@ -142,15 +141,15 @@ const dislikeItem = (req, res) =>
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from dislikeItem` });
-      } else if (err.name === "DocumentNotFoundError") {
+      } if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from dislikeItem` });
-      } else {
+      }
         return res
           .status(INTERNAL_SERVER_ERROR)
           .send({ message: `${messageInternalServerError} from dislikeItem` });
-      }
+
     });
 
 module.exports = {

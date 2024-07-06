@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-//Schemas in models folder are like the blueprint for data
-//Defines what data looks like and help interact w database
+// Schemas in models folder are like the blueprint for data
+// Defines what data looks like and help interact w database
 const userSchema = new mongoose.Schema({
   name: {
     type: String,

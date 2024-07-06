@@ -1,5 +1,5 @@
-//Routes tell the app which controller to use when a user makes a request
-//like signposts that direct traffic
+// Routes tell the app which controller to use when a user makes a request
+// like signposts that direct traffic
 
 const router = require("express").Router();
 
@@ -12,26 +12,26 @@ const {
   dislikeItem,
 } = require("../controllers/clothingItems");
 
-//CRUD
+// CRUD
 
-//Create
+// Create
 router.post("/", createItem);
 
-//Read
+// Read
 router.get("/", getItems);
 
-//Update
+// Update
 
 router.put("/:itemId", updateItem);
 
-//Delete
+// Delete
 
 router.delete("/:itemId", deleteItem);
 
-//Like Item (Put)
+// Like Item (Put)
 router.put("/:itemId/likes", likeItem);
 
-//Dislike Item(Delete)
+// Dislike Item(Delete)
 router.delete("/:itemId/likes", dislikeItem);
 
 module.exports = router;

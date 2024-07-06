@@ -2,7 +2,6 @@
 const User = require("../models/user");
 const {
   OK,
-  NO_CONTENT,
   BAD_REQUEST,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
@@ -11,7 +10,7 @@ const {
   messageNotFoundError,
 } = require("../utils/errors");
 
-//create user
+// create user
 const createUser = (req, res) => {
   console.log(req);
   console.log(req.body);
@@ -29,15 +28,14 @@ const createUser = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} createUser`, err });
-      } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from createUser` });
       }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from createUser` });
     });
 };
 
-//getUsers
+// getUsers
 const getUsers = (req, res) => {
   User.find({})
     .then((items) => res.status(OK).send(items))
@@ -47,14 +45,13 @@ const getUsers = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from getUsers`, err });
-      } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from getUsers` });
       }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from getUsers` });
     });
 };
-//getUserId
+// getUserId
 
 const getUserId = (req, res) => {
   const { userId } = req.params;
@@ -68,15 +65,15 @@ const getUserId = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest}from getUserId ` });
-      } else if (err.name === "DocumentNotFoundError") {
+      }
+      if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from getUserId` });
-      } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from getUserId` });
       }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from getUserId` });
     });
 };
 

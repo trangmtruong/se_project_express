@@ -21,12 +21,12 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "no-underscore-dangle": [
+    "no-underscore-dangle": "off",
+    "no-unused-vars": [
       "error",
       {
-        allow: ["foo_", "_bar"],
+        argsIgnorePattern: "^next$",
       },
     ],
   },
 };
-npx;
