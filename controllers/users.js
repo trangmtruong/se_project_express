@@ -59,14 +59,19 @@ const getUsers = (req, res) => {
 const getUserId = (req, res) => {
   const { userId } = req.params;
 
-  User.find({ _id: userId })
-    .then((item) => res.status(200).send(item))
+  User.findById(userId)
+    .orFail()
+    .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
+      if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest}from getUserId` });
+          .send({ message: `${messageBadRequest}from getUserId ` });
+      } else if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND)
+          .send({ message: `${messageNotFoundError} from getUserId` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)

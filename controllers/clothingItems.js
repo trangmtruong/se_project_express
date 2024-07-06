@@ -84,13 +84,17 @@ const deleteItem = (req, res) => {
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(NO_CONTENT).send({}))
+    .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest} deleteItem`, err });
+          .send({ message: `${messageBadRequest} from deleteItem`, err });
+      } else if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND)
+          .send({ message: `${messageNotFoundError} from deleteItem` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
@@ -104,14 +108,50 @@ const likeItem = (req, res) =>
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
-  );
+  )
+    .orFail()
+    .then((item) => res.status(OK).send(item))
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "CastError") {
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: `${messageBadRequest} from likeItem` });
+      } else if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND)
+          .send({ message: `${messageNotFoundError} from likeItem` });
+      } else {
+        return res
+          .status(INTERNAL_SERVER_ERROR)
+          .send({ message: `${messageInternalServerError} from likeItem` });
+      }
+    });
 
 const dislikeItem = (req, res) =>
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
     { new: true }
-  );
+  )
+    .orFail()
+    .then((item) => res.status(OK).send(item))
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "CastError") {
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: `${messageBadRequest} from dislikeItem` });
+      } else if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND)
+          .send({ message: `${messageNotFoundError} from dislikeItem` });
+      } else {
+        return res
+          .status(INTERNAL_SERVER_ERROR)
+          .send({ message: `${messageInternalServerError} from dislikeItem` });
+      }
+    });
 
 module.exports = {
   createItem,
