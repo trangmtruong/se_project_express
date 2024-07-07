@@ -27,7 +27,7 @@ const createUser = (req, res) => {
         console.error(err);
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest} createUser`, err });
+          .send({ message: `${messageBadRequest} createUser` });
       }
       return res
         .status(INTERNAL_SERVER_ERROR)
@@ -44,7 +44,7 @@ const getUsers = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest} from getUsers`, err });
+          .send({ message: `${messageBadRequest} from getUsers` });
       }
       return res
         .status(INTERNAL_SERVER_ERROR)

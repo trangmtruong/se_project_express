@@ -29,7 +29,7 @@ const createItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest} from createItem`, err });
+          .send({ message: `${messageBadRequest} from createItem` });
       }
         return res
           .status(INTERNAL_SERVER_ERROR)
@@ -47,7 +47,7 @@ const getItems = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest}from getItems`, err });
+          .send({ message: `${messageBadRequest}from getItems` });
       }
         return res
           .status(INTERNAL_SERVER_ERROR)
@@ -68,7 +68,7 @@ const updateItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest} from updateItem`, err });
+          .send({ message: `${messageBadRequest} from updateItem` });
       }
         return res
           .status(INTERNAL_SERVER_ERROR)
@@ -89,7 +89,7 @@ const deleteItem = (req, res) => {
       if (err.name === "ValidationError" || err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest} from deleteItem`, err });
+          .send({ message: `${messageBadRequest} from deleteItem` });
       } if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
