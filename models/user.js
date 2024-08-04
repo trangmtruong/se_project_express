@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 // Schemas in models folder are like the blueprint for data
 // Defines what data looks like and help interact w database
 const userSchema = new mongoose.Schema({
@@ -33,10 +34,25 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 30,
+    minlength: 8,
   },
 });
+userSchema.statics.findUserByCredentials = function findUserByCredentials(
+  email,
+  password
+) {
+  return this.findOne({ email }).then((user) => {
+    if (!user) {
+      return Promise.reject(new Error("Incorrect email or password"));
+    }
+    return bcrypt.compare(password, user.password).then((matched) => {
+      if (!matched) {
+        return Promise.reject(new Error("Incorrect email or password"));
+      }
+      return user;
+    });
+  });
+};
 
 const userModel = mongoose.model("user", userSchema);
 
