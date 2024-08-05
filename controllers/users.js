@@ -9,10 +9,12 @@ const {
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
   DUPLICATE_ERROR,
+  UNAUTHORIZED_ERROR_CODE,
   messageBadRequest,
   messageInternalServerError,
   messageNotFoundError,
   messageDuplicateError,
+  messageUnauthorizedError,
 } = require("../utils/errors");
 
 // create user
@@ -25,9 +27,17 @@ const createUser = (req, res) => {
   // bcrypt.hash(req.body.password, 10)
 
   //throw a 110{{00 error for duplicate error using throw block
+
+  if (!email || !password) {
+    res
+      .status(BAD_REQUEST)
+      .send({ message: `${messageBadRequest} from createUser` });
+    return;
+  }
+
   User.findOne({ email })
-    .then((existingUser) => {
-      if (existingUser) {
+    .then((user) => {
+      if (user) {
         throw { name: "DuplicateError" };
       }
       return bcrypt.hash(password, 10);
@@ -35,9 +45,9 @@ const createUser = (req, res) => {
     .then((hash) => {
       return User.create({ name, avatar, email, password: hash })
 
-        .then((item) => {
-          console.log(item);
-          res.send({ data: item });
+        .then((user) => {
+          console.log(user);
+          res.send({ data: user });
         })
         .catch((err) => {
           if (err.name === "ValidationError") {
@@ -104,12 +114,17 @@ const getUserId = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
   //get email and password from the request body
+  if (!email || !password) {
+    return res
+      .status(BAD_REQUEST)
+      .send({ message: `${messageBadRequest} from login` });
+  }
   return (
     User.findUserByCredentials(email, password)
       //if email and password are correct,
-      .then((item) => {
-        res.status(OK).send(item);
-        //creates JWT
+      .then((user) => {
+        // res.status(OK).send(user);
+        // //creates JWT
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: "7d",
         });
@@ -119,7 +134,9 @@ const login = (req, res) => {
       //if email and password are incorrect, return 401 error
       .catch((err) => {
         console.err(err);
-        res.status(401).send({ message: err.message });
+        res
+          .status(UNAUTHORIZED_ERROR_CODE)
+          .send({ message: `${messageUnauthorizedError}` });
       })
   );
 };
