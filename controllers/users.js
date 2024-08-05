@@ -133,7 +133,7 @@ const login = (req, res) => {
       })
       //if email and password are incorrect, return 401 error
       .catch((err) => {
-        console.err(err);
+        console.error(err);
         res
           .status(UNAUTHORIZED_ERROR_CODE)
           .send({ message: `${messageUnauthorizedError}` });
