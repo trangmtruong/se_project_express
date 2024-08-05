@@ -10,7 +10,7 @@ const messageBadRequest = "Bad Request Error";
 const messageInternalServerError = "Internal Server Error";
 const messageNotFoundError = "Not Found Error";
 const messageDuplicateError = "Email Already Exists";
-const messageUnauthorizedError = "Incorrect Email or Password";
+const messageUnauthorizedError = "Authorizatipn Required";
 
 module.exports = {
   OK,

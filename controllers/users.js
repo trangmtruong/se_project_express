@@ -36,8 +36,8 @@ const createUser = (req, res) => {
   }
 
   User.findOne({ email })
-    .then((user) => {
-      if (user) {
+    .then((existingEmail) => {
+      if (existingEmail) {
         throw { name: "DuplicateError" };
       }
       return bcrypt.hash(password, 10);
@@ -47,7 +47,9 @@ const createUser = (req, res) => {
 
         .then((user) => {
           console.log(user);
-          res.send({ data: user });
+          res
+            .status(201)
+            .send({ name: user.name, avatar: user.avatar, email: user.email });
         })
         .catch((err) => {
           if (err.name === "ValidationError") {
