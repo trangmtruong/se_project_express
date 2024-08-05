@@ -6,6 +6,7 @@ const clothingRouter = require("./clothingItems");
 
 const userRouter = require("./users");
 const { login, createUser } = require("../controllers/users");
+const createUser = require("../controllers/users");
 
 const { NOT_FOUND, messageNotFoundError } = require("../utils/errors");
 
