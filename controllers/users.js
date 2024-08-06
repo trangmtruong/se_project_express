@@ -43,33 +43,33 @@ const createUser = (req, res) => {
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
-      return User.create({ name, avatar, email, password: hash })
-
-        .then((user) => {
+      return User.create({ name, avatar, email, password: hash }).then(
+        (user) => {
           console.log(user);
           res
             .status(201)
             .send({ name: user.name, avatar: user.avatar, email: user.email });
-        })
-        .catch((err) => {
-          if (err.name === "ValidationError") {
-            console.error(err);
-            return res
-              .status(BAD_REQUEST)
-              .send({ message: `${messageBadRequest} createUser` });
-          }
-          if (err.name === "DuplicateError" || err.code === 11000) {
-            return res
-              .status(DUPLICATE_ERROR)
-              .send({ message: `${messageDuplicateError} from createUser` });
-          }
-          return res
-            .status(INTERNAL_SERVER_ERROR)
-            .send({ message: `${messageInternalServerError} from createUser` });
-        });
+        }
+      );
+    })
+
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        console.error(err);
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: `${messageBadRequest} createUser` });
+      }
+      if (err.name === "DuplicateError" || err.code === 11000) {
+        return res
+          .status(DUPLICATE_ERROR)
+          .send({ message: `${messageDuplicateError} from createUser` });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from createUser` });
     });
 };
-
 // getUsers
 const getUsers = (req, res) => {
   User.find({})
