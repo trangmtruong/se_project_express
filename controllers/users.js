@@ -2,7 +2,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const { JWT } = require("../utils/config");
+const { JWT_SECRET } = require("../utils/config");
 const {
   OK,
   BAD_REQUEST,
@@ -46,9 +46,11 @@ const createUser = (req, res) => {
       return User.create({ name, avatar, email, password: hash }).then(
         (user) => {
           console.log(user);
-          res
-            .status(201)
-            .send({ name: user.name, avatar: user.avatar, email: user.email });
+          res.status(201).send({
+            name: user.name,
+            avatar: user.avatar,
+            email: user.email,
+          });
         }
       );
     })
