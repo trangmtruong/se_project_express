@@ -2,8 +2,18 @@
 // like signposts that direct traffic
 
 const { Router } = require("express");
+const { getUsers, updateUser } = require("../controllers/users");
+const auth = require("../middlewares/auth");
 
 const router = Router();
+
+//route to get user data
+router.get("/me", getUsers);
+
+router.use(auth);
+
+//route to modify user data
+router.patch("/users/me", updateUser);
 
 // const { createUser, getUsers, getUserId } = require("../controllers/users");
 // // all routes in this file start with /users

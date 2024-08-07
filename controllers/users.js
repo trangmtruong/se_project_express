@@ -36,6 +36,7 @@ const createUser = (req, res) => {
   }
 
   User.findOne({ email })
+    .select("+password")
     .then((existingEmail) => {
       if (existingEmail) {
         throw { name: "DuplicateError" };
@@ -145,9 +146,44 @@ const login = (req, res) => {
   );
 };
 
+const updateUser = (req, res) => {
+  //findByIdandUpdate
+  //req.user._id
+  //return Not Found
+  //return Validation
+  //return default server error
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name: req.body.name, avatar: req.body.avatar },
+    // pass the options object:
+    {
+      new: true, // the then handler receives the updated entry as input
+      runValidators: true, // the data will be validated before the update
+    }
+  )
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        console.error(err);
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: `${messageBadRequest} updateUser` });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(NOT_FOUND)
+          .send({ message: `${messageNotFoundError} from updateUser` });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from updateUser` });
+    });
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserId,
   login,
+  updateUser,
 };

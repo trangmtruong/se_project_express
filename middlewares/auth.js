@@ -22,8 +22,9 @@ const auth = (req, res, next) => {
   //QUESTION: HOW TO KNOW WHEN TO USE TRY..CATCH.. VERSUS THEN... CATCH???
   try {
     //trying to verify the token
-    const payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
+    console.error(err);
     //return error if something goes wrong
     return res
       .status(UNAUTHORIZED_ERROR_CODE)
@@ -32,6 +33,7 @@ const auth = (req, res, next) => {
 
   //assining payload to request object
   req.user = payload;
+
   //sending request to the next middleware
   return next();
 };
