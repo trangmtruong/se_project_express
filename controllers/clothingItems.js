@@ -85,9 +85,10 @@ const deleteItem = (req, res) => {
           .status(403)
           .send({ message: "You do not have permission to delete this item" });
       }
-      return ClothingItem.findByIdAndDelete(itemId);
+      return ClothingItem.findByIdAndDelete(itemId).then((item) =>
+        res.status(OK).send(item)
+      );
     })
-    .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError" || err.name === "CastError") {

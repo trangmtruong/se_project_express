@@ -39,7 +39,9 @@ const createUser = (req, res) => {
     .select("+password")
     .then((existingEmail) => {
       if (existingEmail) {
-        throw new Error("DuplicateError");
+        const error = new Error();
+        error.name = "DuplicateError";
+        throw error;
       }
       return bcrypt.hash(password, 10);
     })
