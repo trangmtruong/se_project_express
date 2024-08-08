@@ -8,10 +8,10 @@ const auth = require("../middlewares/auth");
 const router = Router();
 
 router.use(auth);
-//route to get user data
+// route to get user data
 router.get("/me", getUsers);
 
-//route to modify user data
+// route to modify user data
 router.patch("/me", updateUser);
 
 // const { createUser, getUsers, getUserId } = require("../controllers/users");

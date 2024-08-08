@@ -23,10 +23,10 @@ const createUser = (req, res) => {
   console.log(req.body);
 
   const { name, avatar, email, password } = req.body;
-  //hash password
+  // hash password
   // bcrypt.hash(req.body.password, 10)
 
-  //throw a 110{{00 error for duplicate error using throw block
+  // throw a 110{{00 error for duplicate error using throw block
 
   if (!email || !password) {
     res
@@ -43,8 +43,7 @@ const createUser = (req, res) => {
       }
       return bcrypt.hash(password, 10);
     })
-    .then((hash) => {
-      return User.create({ name, avatar, email, password: hash }).then(
+    .then((hash) => User.create({ name, avatar, email, password: hash }).then(
         (user) => {
           console.log(user);
           res.status(201).send({
@@ -53,8 +52,7 @@ const createUser = (req, res) => {
             email: user.email,
           });
         }
-      );
-    })
+      ))
 
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -114,11 +112,11 @@ const getUserId = (req, res) => {
         .send({ message: `${messageInternalServerError} from getUserId` });
     });
 };
-//login controller
+// login controller
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  //get email and password from the request body
+  // get email and password from the request body
   if (!email || !password) {
     return res
       .status(BAD_REQUEST)
@@ -126,17 +124,17 @@ const login = (req, res) => {
   }
   return (
     User.findOne({ email })
-      //if email and password are correct,
+      // if email and password are correct,
       .then((user) => {
         // res.status(OK).send(user);
         // //creates JWT
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: "7d",
         });
-        //send token to client
+        // send token to client
         res.send({ token });
       })
-      //if email and password are incorrect, return 401 error
+      // if email and password are incorrect, return 401 error
       .catch((err) => {
         console.error(err);
         res
@@ -147,11 +145,11 @@ const login = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-  //findByIdandUpdate
-  //req.user._id
-  //return Not Found
-  //return Validation
-  //return default server error
+  // findByIdandUpdate
+  // req.user._id
+  // return Not Found
+  // return Validation
+  // return default server error
   User.findByIdAndUpdate(
     req.user._id,
     { name: req.body.name, avatar: req.body.avatar },
