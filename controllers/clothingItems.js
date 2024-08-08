@@ -80,7 +80,7 @@ const deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (itemId !== userId) {
+      if (item.owner.toString() !== userId) {
         return res
           .status(403)
           .send({ message: "You do not have permission to delete this item" });
