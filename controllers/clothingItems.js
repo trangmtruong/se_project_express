@@ -81,16 +81,20 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== userId) {
+        const error = new Error();
+        error.name = "Access Denied";
+        throw error;
+      }
+      return ClothingItem.findByIdAndDelete(itemId);
+    })
+    .then((item) => res.status(OK).send(item))
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "Access Denied") {
         return res
           .status(403)
           .send({ message: "You do not have permission to delete this item" });
       }
-      return ClothingItem.findByIdAndDelete(itemId).then((item) =>
-        res.status(OK).send(item)
-      );
-    })
-    .catch((err) => {
-      console.error(err);
       if (err.name === "ValidationError" || err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
