@@ -75,7 +75,7 @@ const createUser = (req, res) => {
 };
 // getUsers
 const getUsers = (req, res) => {
-  User.find({})
+  User.findById(req.user._id)
     .then((items) => res.status(OK).send(items))
     .catch((err) => {
       console.error(err);
@@ -125,7 +125,7 @@ const login = (req, res) => {
       .send({ message: `${messageBadRequest} from login` });
   }
   return (
-    User.findUserByCredentials(email, password)
+    User.findOne({ email })
       //if email and password are correct,
       .then((user) => {
         // res.status(OK).send(user);

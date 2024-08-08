@@ -31,13 +31,11 @@ const createItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from createItem` });
       }
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from createItem` });
-
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from createItem` });
     });
 };
-
 
 const getItems = (req, res) => {
   ClothingItem.find({})
@@ -49,10 +47,9 @@ const getItems = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest}from getItems` });
       }
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from getItems` });
-
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from getItems` });
     });
 };
 
@@ -70,19 +67,26 @@ const updateItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from updateItem` });
       }
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from updateItem` });
-
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from updateItem` });
     });
 };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+  const userId = req.user._id;
 
-  console.log(itemId);
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
+    .then((item) => {
+      if (itemId !== userId) {
+        return res
+          .status(403)
+          .send({ message: "You do not have permission to delete this item" });
+      }
+      return ClothingItem.findByIdAndDelete(itemId);
+    })
     .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
@@ -90,15 +94,15 @@ const deleteItem = (req, res) => {
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from deleteItem` });
-      } if (err.name === "DocumentNotFoundError") {
+      }
+      if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from deleteItem` });
       }
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from deleteItem` });
-
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from deleteItem` });
     });
 };
 
@@ -116,15 +120,15 @@ const likeItem = (req, res) =>
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from likeItem` });
-      } if (err.name === "DocumentNotFoundError") {
+      }
+      if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from likeItem` });
       }
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from likeItem` });
-
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from likeItem` });
     });
 
 const dislikeItem = (req, res) =>
@@ -141,15 +145,15 @@ const dislikeItem = (req, res) =>
         return res
           .status(BAD_REQUEST)
           .send({ message: `${messageBadRequest} from dislikeItem` });
-      } if (err.name === "DocumentNotFoundError") {
+      }
+      if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
           .send({ message: `${messageNotFoundError} from dislikeItem` });
       }
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `${messageInternalServerError} from dislikeItem` });
-
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: `${messageInternalServerError} from dislikeItem` });
     });
 
 module.exports = {

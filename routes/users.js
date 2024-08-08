@@ -7,13 +7,12 @@ const auth = require("../middlewares/auth");
 
 const router = Router();
 
+router.use(auth);
 //route to get user data
 router.get("/me", getUsers);
 
-router.use(auth);
-
 //route to modify user data
-router.patch("/users/me", updateUser);
+router.patch("/me", updateUser);
 
 // const { createUser, getUsers, getUserId } = require("../controllers/users");
 // // all routes in this file start with /users
