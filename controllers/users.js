@@ -39,20 +39,20 @@ const createUser = (req, res) => {
     .select("+password")
     .then((existingEmail) => {
       if (existingEmail) {
-        throw { name: "DuplicateError" };
+        throw new Error("DuplicateError");
       }
       return bcrypt.hash(password, 10);
     })
-    .then((hash) => User.create({ name, avatar, email, password: hash }).then(
-        (user) => {
-          console.log(user);
-          res.status(201).send({
-            name: user.name,
-            avatar: user.avatar,
-            email: user.email,
-          });
-        }
-      ))
+    .then((hash) =>
+      User.create({ name, avatar, email, password: hash }).then((user) => {
+        console.log(user);
+        res.status(201).send({
+          name: user.name,
+          avatar: user.avatar,
+          email: user.email,
+        });
+      })
+    )
 
     .catch((err) => {
       if (err.name === "ValidationError") {
