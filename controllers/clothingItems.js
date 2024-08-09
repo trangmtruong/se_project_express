@@ -6,9 +6,11 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
+  ACCESS_DENIED_ERROR,
   messageBadRequest,
   messageInternalServerError,
   messageNotFoundError,
+  messageAccessDeniedError,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -42,11 +44,11 @@ const getItems = (req, res) => {
     .then((items) => res.status(OK).send(items))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest}from getItems` });
-      }
+      // if (err.name === "ValidationError") {
+      //   return res
+      //     .status(BAD_REQUEST)
+      //     .send({ message: `${messageBadRequest}from getItems` });
+      // }
       return res
         .status(INTERNAL_SERVER_ERROR)
         .send({ message: `${messageInternalServerError} from getItems` });
@@ -92,8 +94,8 @@ const deleteItem = (req, res) => {
       console.error(err);
       if (err.name === "Access Denied") {
         return res
-          .status(403)
-          .send({ message: "You do not have permission to delete this item" });
+          .status(ACCESS_DENIED_ERROR)
+          .send({ message: `${messageAccessDeniedError} to delete this item` });
       }
       if (err.name === "ValidationError" || err.name === "CastError") {
         return res

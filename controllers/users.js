@@ -91,29 +91,29 @@ const getUsers = (req, res) => {
 };
 // getUserId
 
-const getUserId = (req, res) => {
-  const { userId } = req.params;
+// const getUserId = (req, res) => {
+//   const { userId } = req.params;
 
-  User.findById(userId)
-    .orFail()
-    .then((item) => res.status(OK).send(item))
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `${messageBadRequest}from getUserId ` });
-      }
-      if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: `${messageNotFoundError} from getUserId` });
-      }
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: `${messageInternalServerError} from getUserId` });
-    });
-};
+//   User.findById(userId)
+//     .orFail()
+//     .then((item) => res.status(OK).send(item))
+//     .catch((err) => {
+//       console.error(err);
+//       if (err.name === "CastError") {
+//         return res
+//           .status(BAD_REQUEST)
+//           .send({ message: `${messageBadRequest}from getUserId ` });
+//       }
+//       if (err.name === "DocumentNotFoundError") {
+//         return res
+//           .status(NOT_FOUND)
+//           .send({ message: `${messageNotFoundError} from getUserId` });
+//       }
+//       return res
+//         .status(INTERNAL_SERVER_ERROR)
+//         .send({ message: `${messageInternalServerError} from getUserId` });
+//     });
+// };
 // login controller
 
 const login = (req, res) => {
@@ -161,6 +161,7 @@ const updateUser = (req, res) => {
       runValidators: true, // the data will be validated before the update
     }
   )
+    .orFail()
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -183,7 +184,6 @@ const updateUser = (req, res) => {
 module.exports = {
   createUser,
   getUsers,
-  getUserId,
   login,
   updateUser,
 };
