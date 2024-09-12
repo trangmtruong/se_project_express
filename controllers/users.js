@@ -22,7 +22,12 @@ const createUser = (req, res) => {
   console.log(req);
   console.log(req.body);
 
-  const { name, avatar, email, password } = req.body;
+  let { name, avatar, email, password } = req.body;
+  const userInfo = { name, email };
+  if (avatar) {
+    userInfo.avatar = avatar;
+  }
+
   // hash password
   // bcrypt.hash(req.body.password, 10)
 
@@ -45,16 +50,18 @@ const createUser = (req, res) => {
       }
       return bcrypt.hash(password, 10);
     })
-    .then((hash) =>
-      User.create({ name, avatar, email, password: hash }).then((user) => {
-        console.log(user);
-        res.status(201).send({
-          name: user.name,
-          avatar: user.avatar,
-          email: user.email,
-        });
-      })
-    )
+    .then((hash) => {
+      userInfo.password = hash;
+      return User.create(userInfo);
+    })
+    .then((user) => {
+      console.log(user);
+      res.status(201).send({
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+      });
+    })
 
     .catch((err) => {
       if (err.name === "ValidationError") {
