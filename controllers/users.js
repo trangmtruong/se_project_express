@@ -83,7 +83,7 @@ const createUser = (req, res) => {
 // getUsers
 const getUsers = (req, res) => {
   User.findById(req.user._id)
-    .then((items) => res.status(OK).send(items))
+    .then((user) => res.status(OK).send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {

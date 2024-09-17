@@ -10,7 +10,7 @@ const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   // checks if the header exists and starts with 'Bearer'
-  if (!authorization || !authorization.startsWith("Bearer")) {
+  if (!authorization || !authorization.startsWith("Bearer ")) {
     return res
       .status(UNAUTHORIZED_ERROR_CODE)
       .send({ message: `${messageUnauthorizedError} from auth` });
