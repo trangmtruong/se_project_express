@@ -141,7 +141,7 @@ const login = (req, res) => {
           expiresIn: "7d",
         });
         // send token to client
-        res.send({ token });
+        res.send({ token, user });
       })
       // if email and password are incorrect, return 401 error
       .catch((err) => {

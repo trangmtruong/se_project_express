@@ -113,8 +113,8 @@ const deleteItem = (req, res) => {
     });
 };
 
-const likeItem = (req, res) =>
-  ClothingItem.findByIdAndUpdate(
+const likeItem = (req, res) => {
+  return ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
@@ -137,7 +137,7 @@ const likeItem = (req, res) =>
         .status(INTERNAL_SERVER_ERROR)
         .send({ message: `${messageInternalServerError} from likeItem` });
     });
-
+};
 const dislikeItem = (req, res) =>
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
