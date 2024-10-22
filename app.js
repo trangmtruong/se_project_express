@@ -13,6 +13,8 @@ const app = express();
 //   max: 100, // you can make a maximum of 100 requests from one IP
 // });
 
+const errorHandler = require("./middlewares/error-handler");
+
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
   () => {
@@ -32,6 +34,7 @@ app.use(express.json());
 // });
 app.use(cors());
 app.use(routes);
+app.use(errorHandler);
 
 // app.use("/users", userRouter);
 
