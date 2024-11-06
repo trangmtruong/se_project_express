@@ -1,8 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 // const helmet = require("helmet");
 // const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
 const routes = require("./routes");
 // const userRouter = require("./routes/users");
 const { PORT = 3001 } = process.env;
@@ -14,7 +16,7 @@ const app = express();
 // });
 
 const errorHandler = require("./middlewares/error-handler");
-const { errors } = require("celerate");
+const { errors } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 mongoose.connect(
