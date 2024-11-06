@@ -20,7 +20,7 @@ const UnauthorizedError = require("../errors/unauthorized-err");
 const ForbiddenError = require("../errors/forbidden-err");
 const ConflictError = require("../errors/conflict-err");
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   console.log(req);
 
   console.log(req.body);
@@ -51,7 +51,7 @@ const createItem = (req, res) => {
     });
 };
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.status(OK).send(items))
     .catch((err) => {
@@ -59,7 +59,7 @@ const getItems = (req, res) => {
     });
 };
 
-const updateItem = (req, res) => {
+const updateItem = (req, res, next) => {
   const { itemId } = req.params;
   const { imageUrl } = req.body;
 
@@ -85,7 +85,7 @@ const updateItem = (req, res) => {
     });
 };
 
-const deleteItem = (req, res) => {
+const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
   const userId = req.user._id;
 
@@ -93,9 +93,7 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== userId) {
-        const error = new Error();
-        error.name = "Access Denied";
-        throw error;
+        throw new ForbiddenError("Current user does not own item");
       }
       return ClothingItem.findByIdAndDelete(itemId);
     })
@@ -130,7 +128,7 @@ const deleteItem = (req, res) => {
     });
 };
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   return ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
@@ -159,7 +157,7 @@ const likeItem = (req, res) => {
       //   .send({ message: `${messageInternalServerError} from likeItem` });
     });
 };
-const dislikeItem = (req, res) =>
+const dislikeItem = (req, res, next) =>
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },

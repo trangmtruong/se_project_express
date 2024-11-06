@@ -16,6 +16,7 @@ const {
   messageDuplicateError,
   messageUnauthorizedError,
 } = require("../utils/errors");
+const { handleErrors } = require("../utils/errors");
 
 const NotFoundError = require("../errors/not-found-err");
 const UnauthorizedError = require("../errors/unauthorized-err");
@@ -88,7 +89,7 @@ const createUser = (req, res, next) => {
     });
 };
 // getUsers
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => res.status(OK).send(user))
     .catch((err) => {
@@ -131,7 +132,7 @@ const getUsers = (req, res) => {
 // };
 // login controller
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   // get email and password from the request body
   if (!email || !password) {
@@ -144,6 +145,9 @@ const login = (req, res) => {
     User.findOne({ email })
       // if email and password are correct,
       .then((user) => {
+        if (!user) {
+          throw new BadRequestError("Could not find user's email");
+        }
         // res.status(OK).send(user);
         // //creates JWT
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -163,7 +167,7 @@ const login = (req, res) => {
   );
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   // findByIdandUpdate
   // req.user._id
   // return Not Found

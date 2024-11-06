@@ -14,6 +14,8 @@ const app = express();
 // });
 
 const errorHandler = require("./middlewares/error-handler");
+const { errors } = require("celerate");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
@@ -25,6 +27,7 @@ mongoose.connect(
 // http:localHost:3001/users/12345
 // app.use(helmet());
 // app.use(limiter);
+
 app.use(express.json());
 // app.use((req, res, next) => {
 //   req.user = {
@@ -33,7 +36,21 @@ app.use(express.json());
 //   next();
 // });
 app.use(cors());
+
+//request logger BEFORE all route handlers
+app.use(requestLogger);
+
+//routes
 app.use(routes);
+
+//error logger is enabled AFTER route handlers and BEFORE error handlers
+
+app.use(errorLogger);
+
+//celebrate error handler
+app.use(errors());
+
+//centralized error handler
 app.use(errorHandler);
 
 // app.use("/users", userRouter);
