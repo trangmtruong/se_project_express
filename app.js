@@ -1,19 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-// const helmet = require("helmet");
-// const rateLimit = require("express-rate-limit");
+
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const routes = require("./routes");
-// const userRouter = require("./routes/users");
+
 const { PORT = 3001 } = process.env;
 
 const app = express();
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // in 15 minutes
-//   max: 100, // you can make a maximum of 100 requests from one IP
-// });
 
 const errorHandler = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
@@ -26,21 +21,20 @@ mongoose.connect(
   },
   (e) => console.log("DB error", e)
 );
-// http:localHost:3001/users/12345
-// app.use(helmet());
-// app.use(limiter);
 
 app.use(express.json());
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: "5d8b8592978f8bd833ca8133", // paste the _id of the test user created in the previous step
-//   };
-//   next();
-// });
+
 app.use(cors());
 
 //request logger BEFORE all route handlers
 app.use(requestLogger);
+
+//server crash testing
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
 
 //routes
 app.use(routes);

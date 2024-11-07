@@ -13,6 +13,14 @@ The WTWR project helps user decide what to wear based on weather conditions
 - ** API Endppoints**: Provides endpoints for user actions such as adding, updating, and deleting clothing items, and retrieving recommendations.
 - ** Testing and Deployment**: Includes testing for various functionalities and deployment configurations for remote servers.
 
+## Production Domain
+
+The production server is accessible at:
+
+**`https://api.w2w.jumpingcrab.com`**
+
+All API requests in production shoukld use this base URL.
+
 ## Technologies
 
 - **Node.js**
