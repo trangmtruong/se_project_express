@@ -142,7 +142,7 @@ const login = (req, res, next) => {
     throw new BadRequestError("missing email or password");
   }
   return (
-    User.findOne({ email })
+    User.findUserByCredentials(email, password)
       // if email and password are correct,
       .then((user) => {
         if (!user) {
