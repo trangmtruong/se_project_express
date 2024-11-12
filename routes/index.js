@@ -8,13 +8,11 @@ const userRouter = require("./users");
 const { login, createUser } = require("../controllers/users");
 
 const {
-  validateURL,
-
   validateUserInfo,
   validateUserAuthentication,
 } = require("../middlewares/validation");
 
-const { NOT_FOUND, messageNotFoundError } = require("../utils/errors");
+const NotFoundError = require("../errors/not-found-err");
 
 router.use("/items", clothingRouter);
 router.use("/users", userRouter);
@@ -26,7 +24,7 @@ router.post(
   createUser
 );
 
-router.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: messageNotFoundError });
+router.use((req, res, next) => {
+  next(new NotFoundError("Requested resource not found"));
 });
 module.exports = router;

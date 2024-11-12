@@ -3,32 +3,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-const {
-  OK,
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
-  DUPLICATE_ERROR,
-  UNAUTHORIZED_ERROR_CODE,
-  messageBadRequest,
-  messageInternalServerError,
-  messageNotFoundError,
-  messageDuplicateError,
-  messageUnauthorizedError,
-} = require("../utils/errors");
+const { OK } = require("../utils/errors");
 const { handleErrors } = require("../utils/errors");
 
-const NotFoundError = require("../errors/not-found-err");
-const UnauthorizedError = require("../errors/unauthorized-err");
-const ForbiddenError = require("../errors/forbidden-err");
-const ConflictError = require("../errors/conflict-err");
 const BadRequestError = require("../errors/bad-request-err");
 // create user
 const createUser = (req, res, next) => {
   console.log(req);
   console.log(req.body);
 
-  let { name, avatar, email, password } = req.body;
+  const { name, avatar, email, password } = req.body;
   const userInfo = { name, email };
   if (avatar) {
     userInfo.avatar = avatar;

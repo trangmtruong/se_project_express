@@ -7,7 +7,6 @@ const auth = require("../middlewares/auth");
 const {
   createItem,
   getItems,
-  updateItem,
   deleteItem,
   likeItem,
   dislikeItem,

@@ -1,24 +1,9 @@
 // Controllers decide what happens when you get a request from a server
 // imports clothingItemSchema
 const ClothingItem = require("../models/clothingItem");
-const {
-  OK,
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
-  ACCESS_DENIED_ERROR,
-  messageBadRequest,
-  messageInternalServerError,
-  messageNotFoundError,
-  messageAccessDeniedError,
-  handleErrors,
-} = require("../utils/errors");
+const { OK, handleErrors } = require("../utils/errors");
 
-const NotFoundError = require("../errors/not-found-err");
-const BadRequestError = require("../errors/bad-request-err");
-const UnauthorizedError = require("../errors/unauthorized-err");
 const ForbiddenError = require("../errors/forbidden-err");
-const ConflictError = require("../errors/conflict-err");
 
 const createItem = (req, res, next) => {
   console.log(req);
@@ -128,8 +113,8 @@ const deleteItem = (req, res, next) => {
     });
 };
 
-const likeItem = (req, res, next) => {
-  return ClothingItem.findByIdAndUpdate(
+const likeItem = (req, res, next) =>
+  ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
@@ -138,25 +123,8 @@ const likeItem = (req, res, next) => {
     .then((item) => res.status(OK).send(item))
     .catch((err) => {
       handleErrors(err, next);
-      // console.error(err);
-      // if (err.name === "CastError") {
-      //   return res
-      //     .status(BAD_REQUEST)
-      //     .send({ message: `${messageBadRequest} from likeItem` });
-      // }
-      // if (err.name === "DocumentNotFoundError") {
-      //   return res
-      //     .status(NOT_FOUND)
-      //     .send({ message: `${messageNotFoundError} from likeItem` });
-      // }
-      // //else {
-      // // next(err);
-      // // }
-      // return res
-      //   .status(INTERNAL_SERVER_ERROR)
-      //   .send({ message: `${messageInternalServerError} from likeItem` });
     });
-};
+
 const dislikeItem = (req, res, next) =>
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,

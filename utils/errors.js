@@ -1,6 +1,6 @@
 const BadRequestError = require("../errors/bad-request-err");
 const ConflictError = require("../errors/conflict-err");
-const ForbiddenError = require("../errors/forbidden-err");
+
 const UnauthorizedError = require("../errors/unauthorized-err");
 const NotFoundError = require("../errors/not-found-err");
 
@@ -30,14 +30,11 @@ function handleErrors(err, next) {
   if (err.name === "DuplicateError" || err.code === 11000) {
     return next(new ConflictError("Email already exists"));
   }
-  if (err.name === "Access Denied") {
+  if (err.message === "Incorrect email or password") {
     return next(new UnauthorizedError("Authorization required"));
   }
-  if (err.name === "ForbiddenError") {
-    return next(new ForbiddenError("Access Denied"));
-  } else {
-    next(err);
-  }
+
+  return next(err);
 }
 
 module.exports = {

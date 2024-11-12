@@ -3,10 +3,7 @@
 
 const { Router } = require("express");
 const { getUsers, updateUser } = require("../controllers/users");
-const {
-  validateURL,
-  validateUserUpdate,
-} = require("../middlewares/validation");
+const { validateUserUpdate } = require("../middlewares/validation");
 const auth = require("../middlewares/auth");
 
 const router = Router();
@@ -16,7 +13,7 @@ router.use(auth);
 router.get("/me", getUsers);
 
 // route to modify user data
-router.patch("/me", validateURL, validateUserUpdate, updateUser);
+router.patch("/me", validateUserUpdate, updateUser);
 
 // const { createUser, getUsers, getUserId } = require("../controllers/users");
 // // all routes in this file start with /users

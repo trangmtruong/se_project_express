@@ -1,13 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
-const {
-  UNAUTHORIZED_ERROR_CODE,
-  messageUnauthorizedError,
-  handleErrors,
-} = require("../utils/errors");
 
 const UnauthorizedError = require("../errors/unauthorized-err");
-const HandleErrors = require("../utils/errors");
 
 const auth = (req, res, next) => {
   // getting authorization from the headers
@@ -29,8 +23,8 @@ const auth = (req, res, next) => {
     // trying to verify the token
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    handleErrors(err, next);
-    //   // next(new UnauthorizedError('Authorization Required!'))
+    // handleErrors(err, next);
+    return next(new UnauthorizedError("Authorization Required!"));
     //   console.error(err);
     //   // return error if something goes wrong
     //   return res

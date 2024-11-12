@@ -3,7 +3,7 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const { errors } = require("celebrate");
 const routes = require("./routes");
 
 const { PORT = 3001 } = process.env;
@@ -11,7 +11,7 @@ const { PORT = 3001 } = process.env;
 const app = express();
 
 const errorHandler = require("./middlewares/error-handler");
-const { errors } = require("celebrate");
+
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 mongoose.connect(
@@ -26,27 +26,27 @@ app.use(express.json());
 
 app.use(cors());
 
-//request logger BEFORE all route handlers
+// request logger BEFORE all route handlers
 app.use(requestLogger);
 
-//server crash testing
+// server crash testing
 app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("Server will crash now");
   }, 0);
 });
 
-//routes
+// routes
 app.use(routes);
 
-//error logger is enabled AFTER route handlers and BEFORE error handlers
+// error logger is enabled AFTER route handlers and BEFORE error handlers
 
 app.use(errorLogger);
 
-//celebrate error handler
+// celebrate error handler
 app.use(errors());
 
-//centralized error handler
+// centralized error handler
 app.use(errorHandler);
 
 // app.use("/users", userRouter);
