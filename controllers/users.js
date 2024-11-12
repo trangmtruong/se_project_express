@@ -48,7 +48,7 @@ const createUser = (req, res, next) => {
   }
 
   User.findOne({ email })
-    .select("+password")
+
     .then((existingEmail) => {
       if (existingEmail) {
         const error = new Error();
@@ -62,7 +62,6 @@ const createUser = (req, res, next) => {
       return User.create(userInfo);
     })
     .then((user) => {
-      console.log(user);
       res.status(201).send({
         name: user.name,
         avatar: user.avatar,

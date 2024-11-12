@@ -10,6 +10,7 @@ const validateURL = (value, helpers) => {
 
 const validateClothingItem = celebrate({
   body: Joi.object().keys({
+    weather: Joi.string().valid("hot", "warm", "cold").required(),
     name: Joi.string().min(2).max(30).required().messages({
       "string.empty": "Item name is required",
       "string.min": "Item name must be at least 2 characters",
@@ -34,7 +35,7 @@ const validateUserInfo = celebrate({
       "string.max": "User name cannot be lopnger than 30 characters",
     }),
 
-    avatar: Joi.string().require().custom(validateURL).messages({
+    avatar: Joi.string().required().custom(validateURL).messages({
       "string.empty": "The avatar field must be filled in",
       "string.uri": "The URL for avatar must be valid",
     }),
@@ -61,10 +62,24 @@ const validateUserAuthentication = celebrate({
 
 const validateId = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().length(24).hex().required().messages({
+    itemId: Joi.string().length(24).hex().required().messages({
       "string.empty": "The ID field must be filled in",
       "string.length": " The ID must have 24 characters",
       "string.hex": "The ID must be a valid hexadecimal value",
+    }),
+  }),
+});
+
+const validateUserUpdate = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).messages({
+      "string.min": "User name must be at least 2 characters",
+      "string.max": "User name cannot be lopnger than 30 characters",
+    }),
+
+    avatar: Joi.string().required().custom(validateURL).messages({
+      "string.empty": "The avatar field must be filled in",
+      "string.uri": "The URL for avatar must be valid",
     }),
   }),
 });
@@ -74,4 +89,6 @@ module.exports = {
   validateUserInfo,
   validateUserAuthentication,
   validateId,
+  validateURL,
+  validateUserUpdate,
 };
