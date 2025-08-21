@@ -15,7 +15,7 @@ This back-end express project, combining the react project, creates a full-stack
 
 The production server is accessible at:
 
-**`https://api.w2w.jumpingcrab.com`**
+**`https://api.w2w.crabdance.com`**
 
 ### Technologies and Tools
 
@@ -28,6 +28,12 @@ The production server is accessible at:
 - **ESLint**
 - **Prettier**
 - **Postman**
+- **Jest**
+- **Google Cloud**
+- **pm2**
+- **nginx**
+- **Certbot**
+- **Git**
 
 ### Running the Project
 
