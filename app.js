@@ -12,14 +12,14 @@ const app = express();
 
 const errorHandler = require("./middlewares/error-handler");
 
-const { requestLogger, errorLogger } = require("./middlewares/logger");
+const { requestLogger, errorLogger, logger } = require("./middlewares/logger");
 
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
   () => {
-    console.log("connected to DB");
+    logger.info("Connected to DB");
   },
-  (e) => console.log("DB error", e)
+  (e) => logger.error(`DB error: ${e.message}`, { meta: { error: e } })
 );
 
 app.use(express.json());
@@ -52,6 +52,5 @@ app.use(errorHandler);
 // app.use("/users", userRouter);
 
 app.listen(PORT, () => {
-  console.log(`App is listening at ${PORT}`);
-  console.log("This is working!");
+  logger.info(`App is listening at ${PORT}`);
 });

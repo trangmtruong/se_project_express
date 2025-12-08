@@ -7,11 +7,9 @@ const { OK } = require("../utils/errors");
 const { handleErrors } = require("../utils/errors");
 
 const BadRequestError = require("../errors/bad-request-err");
+const { logger } = require("../middlewares/logger");
 // create user
 const createUser = (req, res, next) => {
-  console.log(req);
-  console.log(req.body);
-
   const { name, avatar, email, password } = req.body;
   const userInfo = { name, email };
   if (avatar) {
@@ -21,6 +19,8 @@ const createUser = (req, res, next) => {
   if (!email || !password) {
     throw new BadRequestError("Invalid email and password");
   }
+
+  logger.info("User sign up attempt", { meta: { email } });
 
   User.findOne({ email })
 
@@ -37,6 +37,7 @@ const createUser = (req, res, next) => {
       return User.create(userInfo);
     })
     .then((user) => {
+      logger.info("User created", { meta: { userId: user._id.toString() } });
       res.status(201).send({
         name: user.name,
         avatar: user.avatar,

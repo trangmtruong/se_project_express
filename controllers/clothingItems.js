@@ -4,18 +4,21 @@ const ClothingItem = require("../models/clothingItem");
 const { OK, handleErrors } = require("../utils/errors");
 
 const ForbiddenError = require("../errors/forbidden-err");
+const { logger } = require("../middlewares/logger");
 
 const createItem = (req, res, next) => {
-  console.log(req);
-
-  console.log(req.body);
-
   const { name, weather, imageUrl } = req.body;
   const { _id } = req.user;
 
+  logger.info("Creating clothing item", {
+    meta: { ownerId: _id, name, weather },
+  });
+
   ClothingItem.create({ name, weather, imageUrl, owner: _id })
     .then((item) => {
-      console.log(item);
+      logger.info("Created clothing item", {
+        meta: { itemId: item._id.toString(), ownerId: _id },
+      });
       res.send({ data: item });
     })
     .catch((err) => {
